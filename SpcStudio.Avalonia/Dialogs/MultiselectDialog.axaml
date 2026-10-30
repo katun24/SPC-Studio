@@ -1,0 +1,47 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.MultiselectDialog"
+        Title="{x:Static app:WindowTitles.SelectMultipleNotes}">
+    <Window.Styles>
+        <Style Selector="UniformGrid">
+            <Setter Property="RowSpacing" Value="{x:Static theme:Space.Px8}"/>
+            <Setter Property="ColumnSpacing" Value="{x:Static theme:Space.Px20}"/>
+        </Style>
+    </Window.Styles>
+    <StackPanel Classes="dialogBody">
+        <StackPanel Classes="checkBoxRows">
+            <controls:CheckListHeader x:Name="ChannelsHeader" Header="CHANNELS"/>
+            <UniformGrid x:Name="ChannelList" Columns="4"/>
+        </StackPanel>
+        <Border Classes="panelRule"/>
+        <StackPanel Classes="checkBoxRows">
+            <controls:CheckListHeader x:Name="InstrumentsHeader" Header="INSTRUMENTS"/>
+            <ScrollViewer MaxHeight="220" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="InstrumentList"/>
+            </ScrollViewer>
+        </StackPanel>
+        <Border Classes="panelRule"/>
+        <StackPanel>
+            <controls:RangeRow Label="{x:Static app:SettingLabels.NotePosition}">
+                <TextBox x:Name="LowestPositionBox" Classes="numericField positionField"/>
+                <TextBox x:Name="HighestPositionBox" Classes="numericField positionField"/>
+            </controls:RangeRow>
+            <controls:RangeRow Label="{x:Static app:SettingLabels.NoteTone}">
+                <TextBox x:Name="LowestToneBox" Classes="noteNameField"/>
+                <TextBox x:Name="HighestToneBox" Classes="noteNameField"/>
+            </controls:RangeRow>
+            <controls:RangeRow Label="{x:Static app:SettingLabels.NoteLength}">
+                <TextBox x:Name="LowestLengthBox" Classes="numericField lengthField"/>
+                <TextBox x:Name="HighestLengthBox" Classes="numericField lengthField"/>
+            </controls:RangeRow>
+        </StackPanel>
+        <Border Classes="panelRule"/>
+        <UniformGrid x:Name="EffectList" Columns="3"/>
+        <Border Classes="panelRule"/>
+        <TextBlock x:Name="CountText" Foreground="{StaticResource TextSecondaryBrush}"/>
+        <controls:ConfirmButtonRow ConfirmText="Select" ConfirmClick="OnSelectClick" CancelClick="OnDismissClick"/>
+    </StackPanel>
+</Window>

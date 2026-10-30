@@ -1,0 +1,12 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.AmkFolderPromptWindow">
+    <StackPanel Classes="dialogBody">
+        <SelectableTextBlock x:Name="MessageText" Classes="dialogMessage"/>
+        <controls:PathPickRow x:Name="AmkFolderRow" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px12}}" NoPathText="{x:Static app:ValueTexts.NoFolderChosen}" BrowseClick="OnAmkBrowseClick"/>
+        <controls:ConfirmButtonRow x:Name="ButtonRow" IsConfirmEnabled="False" ConfirmClick="OnOkClick" CancelClick="OnDismissClick"/>
+    </StackPanel>
+</Window>

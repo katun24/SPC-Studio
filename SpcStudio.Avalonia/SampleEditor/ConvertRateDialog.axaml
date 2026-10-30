@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.ConvertRateDialog"
+        Title="{x:Static app:WindowTitles.ConvertRate}">
+    <StackPanel Classes="dialogBody">
+        <controls:LabeledField Label="{x:Static app:SettingLabels.Hertz}">
+            <TextBox x:Name="RateHzBox" Classes="numericField sixDigitField"/>
+        </controls:LabeledField>
+        <controls:ConfirmButtonRow ConfirmText="Convert" ConfirmClick="OnConvertClick" CancelClick="OnDismissClick"/>
+    </StackPanel>
+</Window>

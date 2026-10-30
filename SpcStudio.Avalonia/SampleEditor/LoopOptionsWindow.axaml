@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.LoopOptionsWindow"
+        Title="{x:Static app:WindowTitles.LoopOptions}">
+    <StackPanel Classes="dialogBody" Spacing="{x:Static theme:Space.Px20}">
+        <StackPanel Classes="settingCheckBoxes">
+            <CheckBox x:Name="ShortestLoopBox" Content="Prefer Shortest Loop"/>
+            <CheckBox x:Name="FlattenVolumeBox" Content="Automatically Flatten Volume"/>
+            <CheckBox x:Name="SmoothCyclesBox" Content="Automatically Smooth Cycles"/>
+        </StackPanel>
+        <controls:SettingSlider x:Name="SmoothCyclesEffectSetting" SettingName="Smooth Cycles Effect" TickFrequency="1" TickPlacement="None"/>
+        <controls:CloseButton Click="OnDismissClick"/>
+    </StackPanel>
+</Window>

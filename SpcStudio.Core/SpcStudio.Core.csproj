@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Targets plain net8.0, so the compiler refuses any platform-locked type in the core. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- The export check starts AddmusicK and plays what it compiles, which is AmkRun's refusals and
+       SpcNative's calls - both internal, and one copy of each is the rule the two follow. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="SpcStudio.ExportCheck" />
+  </ItemGroup>
+
+  <!-- The two native libraries' paths, picked by the build host's platform. -->
+  <PropertyGroup>
+    <SpcAudioNativeBinary Condition="$([MSBuild]::IsOSPlatform('Windows'))">..\native\bin\win-x64\spcaudio.dll</SpcAudioNativeBinary>
+    <SpcAudioNativeBinary Condition="$([MSBuild]::IsOSPlatform('Linux'))">..\native\bin\linux-x64\libspcaudio.so</SpcAudioNativeBinary>
+    <SpcAudioNativeBinary Condition="$([MSBuild]::IsOSPlatform('OSX'))">..\native\bin\osx\libspcaudio.dylib</SpcAudioNativeBinary>
+    <SpcPlayNativeBinary Condition="$([MSBuild]::IsOSPlatform('Windows'))">..\native\bin\win-x64\spcplay.dll</SpcPlayNativeBinary>
+    <SpcPlayNativeBinary Condition="$([MSBuild]::IsOSPlatform('Linux'))">..\native\bin\linux-x64\libspcplay.so</SpcPlayNativeBinary>
+    <SpcPlayNativeBinary Condition="$([MSBuild]::IsOSPlatform('OSX'))">..\native\bin\osx\libspcplay.dylib</SpcPlayNativeBinary>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Copies the audio library beside the exe of every project that references this one. -->
+    <Content Include="$(SpcAudioNativeBinary)"
+             Condition="Exists('$(MSBuildThisFileDirectory)$(SpcAudioNativeBinary)')"
+             Link="$([System.IO.Path]::GetFileName('$(SpcAudioNativeBinary)'))"
+             CopyToOutputDirectory="PreserveNewest" />
+    <!-- Copies the SPC playback library the same way. -->
+    <Content Include="$(SpcPlayNativeBinary)"
+             Condition="Exists('$(MSBuildThisFileDirectory)$(SpcPlayNativeBinary)')"
+             Link="$([System.IO.Path]::GetFileName('$(SpcPlayNativeBinary)'))"
+             CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- Warns rather than fails where this platform's audio library has not been built. -->
+  <Target Name="WarnOnMissingNativeAudio" BeforeTargets="Build"
+          Condition="!Exists('$(MSBuildThisFileDirectory)$(SpcAudioNativeBinary)')">
+    <Warning Text="The audio backend is missing: $(SpcAudioNativeBinary) has not been built, so audio will be unavailable at run time." />
+  </Target>
+
+  <!-- The same warning for the SPC Player's library, and for the same reason: an app that
+       silently cannot play an SPC is worse than a noisy build. -->
+  <Target Name="WarnOnMissingSpcPlay" BeforeTargets="Build"
+          Condition="!Exists('$(MSBuildThisFileDirectory)$(SpcPlayNativeBinary)')">
+    <Warning Text="SPC playback is missing: $(SpcPlayNativeBinary) has not been built, so the SPC Player will be unable to play." />
+  </Target>
+
+</Project>

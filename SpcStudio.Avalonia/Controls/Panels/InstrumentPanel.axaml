@@ -1,0 +1,138 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="using:SpcStudio"
+             xmlns:controls="using:SpcStudio.Controls"
+             xmlns:theme="using:SpcStudio.Theme"
+             x:Class="SpcStudio.Controls.InstrumentPanel">
+    <UserControl.Styles>
+        <Style Selector="TextBlock.note">
+            <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Styles>
+
+    <controls:DockablePanel x:Name="DockableFrame"
+                            PopOutTooltip="{x:Static app:Tooltips.PopOutInstrumentPanel}"
+                            DockTooltip="{x:Static app:Tooltips.DockInstrumentPanel}"
+                            PopOutClick="OnPopOutClick">
+      <controls:DockablePanel.Header>
+        <StackPanel>
+            <Grid ColumnDefinitions="Auto,Auto,*">
+                <Button x:Name="InstrumentPickerButton" Grid.Column="0" Content="Instrument Picker"
+                        VerticalAlignment="Center" Click="OnInstrumentPickerClick"/>
+                <Button x:Name="ExportAllButton" ToolTip.Tip="{x:Static app:Tooltips.ExportAllInstruments}" Grid.Column="1" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                        VerticalAlignment="Center" Click="OnExportAllClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.FolderUpload}"/>
+                </Button>
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*,Auto" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px8}}">
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button x:Name="CreateButton" Classes="squareIcon"
+                        ToolTip.Tip="{x:Static app:Tooltips.CreateInstrument}" Click="OnCreateClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.Plus}"
+                          Fill="{StaticResource TextPrimaryBrush}"/>
+                </Button>
+                <Button x:Name="ImportButton" ToolTip.Tip="{x:Static app:Tooltips.ImportInstrument}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                        Click="OnImportClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.TrayDown}"
+                          Fill="{StaticResource TextPrimaryBrush}"/>
+                </Button>
+                <Button x:Name="ExportButton" ToolTip.Tip="{x:Static app:Tooltips.ExportInstrument}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                        Click="OnExportClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.TrayUp}"
+                          Fill="{StaticResource TextPrimaryBrush}"/>
+                </Button>
+                <Button x:Name="DuplicateButton" ToolTip.Tip="{x:Static app:Tooltips.DuplicateInstrument}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                        Click="OnDuplicateClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.ContentCopy}"
+                          Fill="{StaticResource TextPrimaryBrush}"/>
+                </Button>
+                <Button x:Name="DeleteButton" ToolTip.Tip="{x:Static app:Tooltips.DeleteInstrument}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                        Click="OnDeleteClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.Bin}"
+                          Fill="{StaticResource TextPrimaryBrush}"/>
+                </Button>
+                <Button x:Name="ColorButton" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                        Click="OnColorClick"/>
+                <Popup x:Name="ColorPopup" Placement="RightEdgeAlignedTop" IsLightDismissEnabled="True">
+                    <controls:HueStrip x:Name="InstrumentHueStrip"/>
+                </Popup>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button x:Name="SelectNotesButton" ToolTip.Tip="{x:Static app:Tooltips.SelectInstrumentNotes}" Classes="squareIcon"
+                        Click="OnSelectNotesClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.SelectAll}"
+                          Fill="{StaticResource TextPrimaryBrush}"/>
+                </Button>
+                <Button x:Name="PlayButton" ToolTip.Tip="{x:Static app:Tooltips.PlayInstrument}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}">
+                    <theme:IconShape x:Name="PlayIcon" Data="{x:Static theme:AppIcons.Play}"
+                          Fill="{StaticResource TextPrimaryBrush}"/>
+                </Button>
+            </StackPanel>
+            </Grid>
+        </StackPanel>
+      </controls:DockablePanel.Header>
+      <controls:DockablePanel.Body>
+
+        <controls:FieldRow x:Name="PickRow">
+            <controls:FieldOverride>
+                <Button x:Name="RenameButton" ToolTip.Tip="{x:Static app:Tooltips.RenameInstrument}" Classes="squareIcon" Focusable="False"
+                        Click="OnRenameClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.Pencil}"
+                          Fill="{StaticResource TextPrimaryBrush}"/>
+                </Button>
+            </controls:FieldOverride>
+            <controls:RenamableDropDown x:Name="InstrumentPick" Grid.Column="2" Grid.ColumnSpan="2">
+                <ComboBox x:Name="InstrumentBox" VerticalAlignment="Center"
+                          HorizontalAlignment="Stretch"
+                          ItemTemplate="{StaticResource InstrumentItemTemplate}"
+                          SelectionChanged="OnInstrumentSelected"/>
+            </controls:RenamableDropDown>
+        </controls:FieldRow>
+
+        <StackPanel x:Name="InstrumentFields" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px4}}">
+            <controls:FieldRow Label="Sample">
+                <ComboBox x:Name="SampleBox" Classes="wideField"
+                          SelectionChanged="OnSampleChanged"/>
+                <controls:FieldOverride>
+                    <Button x:Name="SampleEditButton" ToolTip.Tip="{x:Static app:Tooltips.OpenSampleInSampleEditor}" Classes="squareIcon"
+                            Focusable="False" Click="OnSampleEditClick">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.Waveform}"/>
+                    </Button>
+                </controls:FieldOverride>
+            </controls:FieldRow>
+
+            <StackPanel x:Name="TuningSection" Classes="slotless" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px12}}">
+                <controls:FieldRow Label="Tuning">
+                    <Slider x:Name="TuningSlider" Classes="fieldSlider"
+                            Grid.ColumnSpan="2" Minimum="-96" Maximum="96"/>
+                </controls:FieldRow>
+                <Grid Margin="{theme:SpaceThickness Left={StaticResource FieldLabelWidth}}"
+                      ColumnDefinitions="Auto,Auto,Auto,*">
+                    <controls:LabeledField Grid.Column="0" Label="Octave">
+                        <TextBox x:Name="OctaveBox" Classes="signedField"/>
+                    </controls:LabeledField>
+                    <controls:LabeledField Grid.Column="1" Label="Semitone"
+                                           Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px10}}">
+                        <TextBox x:Name="SemitoneBox" Classes="signedField"/>
+                    </controls:LabeledField>
+                    <controls:LabeledField Grid.Column="2" Label="{x:Static app:SettingLabels.Cents}"
+                                           Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px10}}">
+                        <TextBox x:Name="CentsBox" Classes="signedField"/>
+                    </controls:LabeledField>
+                    <Button Grid.Column="3" x:Name="MeasureButton" Content="Measure"
+                            Padding="{theme:SpaceThickness Horizontal={x:Static theme:Space.Px10} Vertical={x:Static theme:Space.Px3}}" HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Click="OnMeasureClick"/>
+                </Grid>
+                <TextBlock x:Name="MeasuredText" Classes="note" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px106} Top={x:Static theme:Space.Px3}}"
+                           IsVisible="False"/>
+            </StackPanel>
+
+            <controls:NoteValuesView x:Name="InstrumentValues" Classes="slotless" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px12}}"/>
+
+        </StackPanel>
+      </controls:DockablePanel.Body>
+    </controls:DockablePanel>
+</UserControl>

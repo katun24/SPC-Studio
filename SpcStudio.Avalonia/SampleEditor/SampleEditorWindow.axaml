@@ -1,0 +1,119 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        xmlns:theme="using:SpcStudio.Theme"
+        x:Class="SpcStudio.SampleEditorWindow"
+        Title="{x:Static app:WindowTitles.SampleEditor}"
+        Background="{StaticResource PanelBrush}"
+        Width="760" Height="579" MinWidth="360" MinHeight="286">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Edit" SubmenuOpened="OnSampleEditMenuOpened">
+                <MenuItem Header="Cut" InputGesture="Ctrl+X" Tag="{x:Static controls:SampleEditKind.Cut}" Click="OnEditItemClick"/>
+                <MenuItem Header="Copy" InputGesture="Ctrl+C" Tag="{x:Static controls:SampleEditKind.Copy}" Click="OnEditItemClick"/>
+                <MenuItem Header="Paste" InputGesture="Ctrl+V" Tag="{x:Static controls:SampleEditKind.Paste}" Click="OnEditItemClick"/>
+                <MenuItem Header="Trim" Tag="{x:Static controls:SampleEditKind.Trim}" Click="OnEditItemClick"/>
+                <Separator/>
+                <MenuItem Header="Select Loop" Tag="{x:Static controls:SampleEditKind.SelectLoop}" Click="OnEditItemClick"/>
+            </MenuItem>
+            <MenuItem Header="Process" SubmenuOpened="OnSampleEditMenuOpened">
+                <MenuItem Header="Fade In" Tag="{x:Static controls:SampleEditKind.FadeIn}" Click="OnEditItemClick"/>
+                <MenuItem Header="Fade Out" Tag="{x:Static controls:SampleEditKind.FadeOut}" Click="OnEditItemClick"/>
+                <MenuItem Header="Reverse" Tag="{x:Static controls:SampleEditKind.Reverse}" Click="OnEditItemClick"/>
+                <Separator/>
+                <MenuItem Header="Find Loop" Tag="{x:Static controls:SampleEditKind.FindLoop}" Click="OnEditItemClick"/>
+                <MenuItem Header="Flatten Volume" Tag="{x:Static controls:SampleEditKind.FlattenVolume}" Click="OnEditItemClick"/>
+                <MenuItem Header="Smooth Cycles" Tag="{x:Static controls:SampleEditKind.SmoothCycles}" Click="OnEditItemClick"/>
+                <Separator/>
+                <MenuItem Header="Convert Rate..." Tag="{x:Static controls:SampleEditKind.ConvertRate}" Click="OnEditItemClick"/>
+            </MenuItem>
+            <MenuItem Header="Options">
+                <MenuItem Header="Loop Options..." Click="OnLoopOptionsClick"/>
+            </MenuItem>
+        </Menu>
+        <DockPanel Margin="{theme:SpaceThickness Horizontal={x:Static theme:Space.Px8} Top={x:Static theme:Space.Px8} Bottom={x:Static theme:Space.Px6}}">
+            <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,*">
+                <StackPanel Grid.Column="0" Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <Button x:Name="CreateButton" ToolTip.Tip="{x:Static app:Tooltips.CreateSample}" Classes="squareIcon"
+                            Click="OnCreateClick">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.Plus}"/>
+                    </Button>
+                    <Button x:Name="ImportButton" ToolTip.Tip="{x:Static app:Tooltips.ImportSamples}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                            Click="OnImportClick">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.TrayDown}"/>
+                    </Button>
+                    <Button x:Name="ExportSampleButton" ToolTip.Tip="{x:Static app:Tooltips.ExportSample}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                            Click="OnExportSampleClick">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.TrayUp}"/>
+                    </Button>
+                    <Button x:Name="DuplicateButton" ToolTip.Tip="{x:Static app:Tooltips.DuplicateSample}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                            Click="OnDuplicateClick">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.ContentCopy}"/>
+                    </Button>
+                    <Button x:Name="DeleteButton" ToolTip.Tip="{x:Static app:Tooltips.DeleteSample}" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                            Click="OnDeleteClick">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.Bin}"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="RenameButton" ToolTip.Tip="{x:Static app:Tooltips.RenameSample}" Classes="squareIcon" Focusable="False"
+                            Click="OnRenameClick">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.Pencil}"/>
+                    </Button>
+                    <controls:RenamableDropDown x:Name="SamplePick" Width="280" NameCharacters="DiskName"
+                                                Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}">
+                        <ComboBox x:Name="SampleBox" HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Center" SelectionChanged="OnSampleSelected"/>
+                    </controls:RenamableDropDown>
+                </StackPanel>
+                <CheckBox x:Name="LoopBox" Grid.Column="2" Content="Loop" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px14}}"
+                          HorizontalAlignment="Left" VerticalAlignment="Center"
+                          IsCheckedChanged="OnLoopChanged"/>
+                <Button x:Name="ExportAllButton" ToolTip.Tip="{x:Static app:Tooltips.ExportAllSamples}" Grid.Column="2" Classes="squareIcon"
+                        HorizontalAlignment="Right" VerticalAlignment="Center"
+                        Click="OnExportAllClick">
+                    <theme:IconShape Data="{x:Static theme:AppIcons.FolderUpload}"/>
+                </Button>
+            </Grid>
+            <Panel DockPanel.Dock="Bottom">
+                <controls:TransportButtons x:Name="Transport"
+                                           PlayPauseClick="OnPlayPauseClick" StopClick="OnStopClick"/>
+                <SelectableTextBlock x:Name="SampleSizeText" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </Panel>
+            <Grid x:Name="PitchRow" DockPanel.Dock="Bottom" ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto" RowDefinitions="Auto,Auto"
+                  Margin="{theme:SpaceThickness Vertical={x:Static theme:Space.Px12}}">
+                <controls:LabeledField Grid.Column="2" Label="{x:Static app:SettingLabels.NoteTone}" HorizontalAlignment="Center"
+                                       Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"/>
+                <controls:LabeledField Grid.Column="3" Label="{x:Static app:SettingLabels.Cents}" HorizontalAlignment="Center"
+                                       Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"/>
+                <controls:LabeledField Grid.Column="5" Label="{x:Static app:SettingLabels.Hertz}" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Text="Pitch" Classes="fieldLabel"/>
+                <Slider x:Name="PitchSlider" Grid.Row="1" Grid.Column="1" Classes="fieldSlider"/>
+                <TextBox x:Name="PitchToneBox" Grid.Row="1" Grid.Column="2" Classes="noteNameField" VerticalAlignment="Center"
+                         Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"/>
+                <TextBox x:Name="PitchCentsBox" Grid.Row="1" Grid.Column="3" Classes="signedField" VerticalAlignment="Center"
+                         Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"/>
+                <TextBlock Grid.Row="1" Grid.Column="4" Classes="fieldSlash" Margin="{theme:SpaceThickness Horizontal={x:Static theme:Space.Px6}}"/>
+                <TextBox x:Name="PitchHzBox" Grid.Row="1" Grid.Column="5" Classes="numericField sixDigitField" VerticalAlignment="Center"/>
+            </Grid>
+            <controls:PanelSection x:Name="RackSection" DockPanel.Dock="Bottom" Header="EFFECTS" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px12}}">
+                <StackPanel x:Name="RackRows"/>
+            </controls:PanelSection>
+            <Panel Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px8}}">
+                <Border Classes="surfaceFrame">
+                    <DockPanel>
+                        <controls:SampleRuler x:Name="Ruler" DockPanel.Dock="Top"/>
+                        <Panel DockPanel.Dock="Bottom" Classes="reservedBarRow">
+                            <ScrollBar x:Name="WaveScroll" Orientation="Horizontal"
+                                       IsVisible="False" Minimum="0"/>
+                        </Panel>
+                        <controls:WaveformView x:Name="Waveform"/>
+                    </DockPanel>
+                </Border>
+                <controls:SurfaceMarkerLayer x:Name="WaveMarkers"/>
+            </Panel>
+        </DockPanel>
+    </DockPanel>
+</Window>

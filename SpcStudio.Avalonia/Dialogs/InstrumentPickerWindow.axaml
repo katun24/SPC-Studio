@@ -1,0 +1,15 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.InstrumentPickerWindow"
+        Title="{x:Static app:WindowTitles.InstrumentPicker}"
+        Background="{StaticResource PanelBrush}"
+        Width="380" Height="560" MinWidth="260" MinHeight="200">
+    <DockPanel Margin="{theme:SpaceThickness AllSides={x:Static theme:Space.Px8}}" VerticalSpacing="{x:Static theme:Space.Px8}">
+        <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add Folder"
+                Classes="textButton" Click="OnAddFolderClick"/>
+        <controls:ListFrame x:Name="TreeList"/>
+    </DockPanel>
+</Window>

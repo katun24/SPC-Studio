@@ -1,0 +1,98 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="using:SpcStudio"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.SpcPlayerWindow"
+        Title="{x:Static app:WindowTitles.SpcPlayer}"
+        Background="{StaticResource PanelBrush}"
+        Width="1440" Height="700" MinWidth="900" MinHeight="520"
+        WindowState="Maximized">
+    <DockPanel>
+        <controls:TransportBar x:Name="Transport" DockPanel.Dock="Bottom"
+                               PlayPauseClick="OnPlayPauseClick" StopClick="OnStopClick"/>
+        <Grid x:Name="Body" ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto,*"
+              Margin="{theme:SpaceThickness AllSides={x:Static theme:Space.Px8}}" RowSpacing="{x:Static theme:Space.Px8}">
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="{x:Static theme:Space.Px8}">
+            <Button x:Name="OpenButton" ToolTip.Tip="{x:Static app:Tooltips.LoadSpc}" Classes="squareIcon" Click="OnOpenClick">
+                <theme:IconShape Data="{x:Static theme:AppIcons.TrayDown}"/>
+            </Button>
+            <Button x:Name="TranscribeButton" Content="Transcribe" Classes="textButton"
+                    IsEnabled="False" Click="OnTranscribeClick"/>
+            <Button x:Name="TranscribeToMarkerButton" Content="Transcribe To Marker" Classes="textButton"
+                    IsEnabled="False" Click="OnTranscribeToMarkerClick"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="{theme:SpaceThickness Right={x:Static theme:Space.Px8}}">
+            <Panel x:Name="StackedSlot"/>
+            <StackPanel x:Name="ChannelButtons" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px8}}"/>
+        </StackPanel>
+        <Border x:Name="TraceFrame" Grid.Row="1" Grid.Column="1" Classes="surfaceFrame"
+                Background="{StaticResource SunkenBrush}">
+            <DockPanel>
+                <controls:SpcPitchRuler x:Name="PitchRuler" DockPanel.Dock="Left"
+                                        IsVisible="False"/>
+                <Border x:Name="PitchRulerLine" DockPanel.Dock="Left" Width="1"
+                        Background="{StaticResource BorderBrush}" IsVisible="False"/>
+                <ScrollViewer x:Name="TraceScroll" Focusable="False"
+                              Classes="reservedBarRow"
+                              VerticalScrollBarVisibility="Disabled">
+                    <controls:SpcTraceView x:Name="Trace"/>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+        <controls:DragDivider x:Name="ListDivider" Grid.Row="1" Grid.Column="2" Orientation="Vertical"/>
+        <controls:SurfaceMarkerLayer x:Name="TraceMarkers" Grid.Row="1" Grid.Column="1"/>
+        <controls:SpcDeck x:Name="ListColumn" Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Width="{StaticResource SpcListColumnWidth}">
+            <Border x:Name="SongPanel" Grid.Row="1" Classes="panelFrame playerPanel">
+                <StackPanel Classes="slotless">
+                    <controls:HeaderRow Header="METADATA" Classes="groupHeader"/>
+                    <controls:FieldRow Label="Title" Classes="readout">
+                        <SelectableTextBlock x:Name="TitleText" Classes="fieldValue"/>
+                    </controls:FieldRow>
+                    <controls:FieldRow Label="Author" Classes="readout">
+                        <SelectableTextBlock x:Name="AuthorText" Classes="fieldValue"/>
+                    </controls:FieldRow>
+                    <controls:FieldRow Label="Game" Classes="readout">
+                        <SelectableTextBlock x:Name="GameText" Classes="fieldValue"/>
+                    </controls:FieldRow>
+                    <controls:FieldRow Label="Comment" Classes="readout">
+                        <SelectableTextBlock x:Name="CommentText" Classes="fieldValue"/>
+                    </controls:FieldRow>
+
+                    <Border Classes="panelRule"/>
+
+                    <controls:FieldRow Label="Volume" Classes="readout">
+                        <SelectableTextBlock x:Name="MasterVolumeText" Classes="fieldValue counting"/>
+                    </controls:FieldRow>
+
+                    <Border Classes="panelRule"/>
+
+                    <controls:HeaderRow Header="ECHO" Classes="groupHeader"/>
+                    <controls:FieldRow Label="Volume" Classes="readout">
+                        <SelectableTextBlock x:Name="EchoVolumeText" Classes="fieldValue counting"/>
+                    </controls:FieldRow>
+                    <controls:FieldRow Label="{x:Static app:SettingLabels.EchoFeedback}" Classes="readout">
+                        <SelectableTextBlock x:Name="EchoFeedbackText" Classes="fieldValue counting"/>
+                    </controls:FieldRow>
+                    <controls:FieldRow Label="{x:Static app:SettingLabels.EchoDelay}" Classes="readout">
+                        <SelectableTextBlock x:Name="EchoDelayText" Classes="fieldValue counting"/>
+                    </controls:FieldRow>
+                    <controls:FieldRow Label="{x:Static app:SettingLabels.EchoFilter}" Classes="readout">
+                        <SelectableTextBlock x:Name="EchoFilterText" Classes="fieldValue counting"/>
+                    </controls:FieldRow>
+                    <controls:FieldRow Label="Writes" Classes="readout">
+                        <SelectableTextBlock x:Name="EchoWritesText" Classes="fieldValue counting"/>
+                    </controls:FieldRow>
+                </StackPanel>
+            </Border>
+            <Border x:Name="VoicePanel" Grid.Row="1" Classes="panelFrame playerPanel">
+                <controls:ListTable x:Name="VoiceTable"/>
+            </Border>
+            <Border x:Name="SamplePanel" Grid.Row="1" Classes="panelFrame playerPanel">
+                <controls:ListTable x:Name="SampleTable"/>
+            </Border>
+        </controls:SpcDeck>
+        </Grid>
+    </DockPanel>
+</Window>

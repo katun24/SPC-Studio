@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.SongListWindow"
+        Title="{x:Static app:WindowTitles.SongList}"
+        Background="{StaticResource PanelBrush}"
+        Width="480" Height="640" MinWidth="400" MinHeight="320">
+    <DockPanel Margin="{theme:SpaceThickness AllSides={x:Static theme:Space.Px8}}" VerticalSpacing="{x:Static theme:Space.Px8}">
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal" HorizontalAlignment="Left" Spacing="{x:Static theme:Space.Px8}">
+            <Button Content="Save" Classes="textButton" Click="OnSaveClick"/>
+            <Button x:Name="AddSongButton" Content="Add Song..." Classes="textButton" Click="OnAddSongClick"/>
+            <Button Content="Run AddmusicK" Classes="textButton" Click="OnRunClick"/>
+        </StackPanel>
+        <controls:SongListDeck x:Name="Tables">
+            <controls:ListFrame x:Name="LocalList"/>
+            <controls:ListFrame x:Name="GlobalList"/>
+        </controls:SongListDeck>
+    </DockPanel>
+</Window>

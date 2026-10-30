@@ -1,0 +1,83 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The app, on plain net8.0 so it runs on Windows, Linux and macOS, and built as SpcStudio.exe. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>SpcStudio</AssemblyName>
+    <RootNamespace>SpcStudio</RootNamespace>
+    <Version>0.1.1</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <ShippedLicenseFolder>Licenses\</ShippedLicenseFolder>
+    <LibrariesFolder>Libraries</LibrariesFolder>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Goes into the exe's own Win32 resources, which is where Explorer, the taskbar and
+         Alt+Tab read an icon from. Unlike WPF, that is *all* it reaches: an Avalonia window
+         takes its title bar icon from its own Icon property and nothing else, so the windows
+         name the same file again as an avares:// resource below. -->
+    <ApplicationIcon>Assets\Icons\noteblock.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Avalonia 11.3.20, MIT, confirmed from the package's own nuspec rather than from the
+         website. Desktop is the Win32, X11 and macOS backends plus Skia; Fluent is the base
+         theme our own dictionary is laid over, and is here so that a control we have not
+         templated yet still draws.
+
+         11 rather than 12, and it is the build toolchain that decides it rather than taste:
+         12's source generator is built against Roslyn 4.14, which ships in the .NET 10 SDK
+         alone - under the .NET 8 SDK the compiler skips it with a warning and the build
+         succeeds having generated neither InitializeComponent nor the x:Name fields, which is
+         a silent failure rather than a loud one. 11.3.20 builds clean on the SDK every machine
+         and both workflows already have. -->
+    <PackageReference Include="Avalonia" Version="11.3.20" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.20" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.20" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Globbed rather than listed, so deleting Assets/Fonts leaves nothing dangling here.
+         AppFonts names stock fonts after the embedded one, so the app falls back on its own
+         when the folder is gone. AvaloniaResource rather than EmbeddedResource: a font is
+         reached through an avares:// URI, which reads it out of the assembly. -->
+    <AvaloniaResource Include="Assets\Fonts\*.ttf" />
+    <!-- The window icon, which is the same file the exe's Win32 resource is built from. It is
+         listed rather than globbed: the fonts above are a folder that can be deleted whole,
+         where the windows name this one by URI and would fail to load without it. -->
+    <AvaloniaResource Include="Assets\Icons\noteblock.ico" />
+    <AvaloniaResource Include="Assets\Icons\error.ico" />
+    <AvaloniaResource Include="Assets\Icons\info.ico" />
+    <AvaloniaResource Include="Assets\Icons\ok.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ShippedLicense Include="$(ShippedLicenseFolder)*.txt"/>
+    <ShippedLicense Include="..\LICENSE" Link="$(ShippedLicenseFolder)SPC Studio-LICENSE.txt"/>
+    <ShippedLicense Include="Assets\Fonts\Inter-LICENSE.txt" Link="$(ShippedLicenseFolder)Inter-LICENSE.txt"/>
+    <ShippedLicense Include="Theme\MaterialDesignIcons-LICENSE.txt" Link="$(ShippedLicenseFolder)MaterialDesignIcons-LICENSE.txt"/>
+    <ShippedLicense Include="Theme\Apache-2.0-LICENSE.txt" Link="$(ShippedLicenseFolder)Apache-2.0-LICENSE.txt"/>
+    <ShippedLicense Include="..\native\vendor\snes_spc\LICENSE" Link="$(ShippedLicenseFolder)snes_spc-LICENSE.txt"/>
+    <ShippedLicense Include="..\native\vendor\miniaudio\LICENSE" Link="$(ShippedLicenseFolder)miniaudio-LICENSE.txt"/>
+    <None Remove="@(ShippedLicense)"/>
+    <None Include="@(ShippedLicense)" CopyToOutputDirectory="PreserveNewest"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="LibrariesFolder" Value="$(LibrariesFolder)"/>
+  </ItemGroup>
+
+  <Target Name="MoveLibrariesOutOfAppFolder" AfterTargets="Publish" Condition="'$(PublishSingleFile)' == 'true'">
+    <ItemGroup>
+      <PublishedLibrary Include="$(PublishDir)*" Exclude="$(PublishDir)$(AssemblyName);$(PublishDir)$(AssemblyName).exe"/>
+    </ItemGroup>
+    <Move SourceFiles="@(PublishedLibrary)" DestinationFolder="$(PublishDir)$(LibrariesFolder)"/>
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpcStudio.Core\SpcStudio.Core.csproj" />
+  </ItemGroup>
+
+</Project>

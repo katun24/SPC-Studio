@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:SpcStudio.Controls"
+             xmlns:theme="using:SpcStudio.Theme"
+             x:Class="SpcStudio.Controls.EnvelopeRowsView"
+             ClipToBounds="False">
+    <StackPanel>
+        <Border Classes="surfaceFrame" Height="230" Margin="{theme:SpaceThickness Bottom={x:Static theme:Space.Px8}}">
+            <DockPanel>
+                <controls:EnvelopeRuler DockPanel.Dock="Top" Height="{x:Static controls:RulerBand.Height}"/>
+                <controls:AdsrGraph x:Name="Graph"/>
+            </DockPanel>
+        </Border>
+        <StackPanel x:Name="Rows"/>
+        <controls:AddRowButton x:Name="AddButton"/>
+    </StackPanel>
+</UserControl>

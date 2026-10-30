@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        x:Class="SpcStudio.AboutWindow"
+        Title="{x:Static app:WindowTitles.About}">
+    <Window.Resources>
+        <x:Double x:Key="AppNameFontSize">24</x:Double>
+        <DataTemplate x:Key="LinkLineTemplate">
+            <StackPanel Orientation="Horizontal">
+                <HyperlinkButton Content="{Binding LinkText}" NavigateUri="{Binding Source}"/>
+                <SelectableTextBlock Text="{Binding TextAfter}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <StackPanel Classes="dialogBody" Spacing="{x:Static theme:Space.Px20}">
+        <StackPanel>
+            <SelectableTextBlock Text="{x:Static app:WindowTitles.App}" HorizontalAlignment="Center"
+                                 Margin="{theme:SpaceThickness Bottom={x:Static theme:Space.Px16}}"
+                                 FontSize="{StaticResource AppNameFontSize}" FontWeight="{StaticResource HeaderFontWeight}"/>
+            <SelectableTextBlock x:Name="VersionLine"/>
+            <SelectableTextBlock Text="by katun24"/>
+        </StackPanel>
+        <ContentControl x:Name="DiscordRow" ContentTemplate="{StaticResource LinkLineTemplate}"/>
+        <StackPanel Spacing="{x:Static theme:Space.Px8}">
+            <TextBlock Classes="panelHeader" Text="CREDITS"/>
+            <ItemsControl x:Name="CreditList" ItemTemplate="{StaticResource LinkLineTemplate}"/>
+        </StackPanel>
+        <SelectableTextBlock Text="SPC Studio is not affiliated with Nintendo."/>
+        <Button Content="OK" Classes="dialogButton emphasized" HorizontalAlignment="Right" IsDefault="True" Click="OnDismissClick"/>
+    </StackPanel>
+</Window>

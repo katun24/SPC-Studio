@@ -1,0 +1,18 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.MmlExportOptionsWindow"
+        Title="{x:Static app:WindowTitles.MmlExportOptions}">
+    <StackPanel Classes="dialogBody">
+        <StackPanel Classes="settingCheckBoxes">
+            <CheckBox x:Name="LoopsBox" Content="Loops" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="KeyOnRemoteCodeBox" Content="Key-on remote code" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="HeldNotesAsLegatoBox" Content="Held notes as legato" IsCheckedChanged="OnOptionBoxChanged"/>
+        </StackPanel>
+        <StackPanel Classes="dialogButtonRow">
+            <controls:CloseButton Click="OnDismissClick"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

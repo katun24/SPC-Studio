@@ -1,0 +1,18 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        x:Class="SpcStudio.MessageDialog">
+    <StackPanel Classes="dialogBody" MinWidth="260" MaxWidth="460">
+        <ScrollViewer MaxHeight="360" HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <SelectableTextBlock x:Name="MessageText" Classes="dialogMessage"/>
+        </ScrollViewer>
+        <StackPanel x:Name="ButtonRow" Classes="dialogButtonRow">
+            <Button x:Name="YesButton" Classes="dialogButton emphasized" Content="Yes" IsDefault="True" Click="OnYesClick"/>
+            <Button x:Name="NoButton" Classes="dialogButton" Content="No" Click="OnNoClick"/>
+            <Button x:Name="CancelButton" Classes="dialogButton" Content="Cancel" Click="OnCancelClick"/>
+            <Button x:Name="OkButton" Classes="dialogButton emphasized" Content="OK" IsDefault="True"
+                    Click="OnOkClick"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

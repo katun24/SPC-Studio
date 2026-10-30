@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.PreferencesWindow"
+        Title="{x:Static app:WindowTitles.Preferences}">
+    <StackPanel Classes="dialogBody" Spacing="{x:Static theme:Space.Px20}">
+        <StackPanel Classes="setting">
+            <TextBlock Text="AddmusicK Folder"/>
+            <controls:PathPickRow x:Name="AmkFolderRow" NoPathText="{x:Static app:ValueTexts.NoFolderChosen}" BrowseClick="OnAmkBrowseClick"/>
+        </StackPanel>
+        <StackPanel Classes="setting">
+            <TextBlock Text="ROM"/>
+            <controls:PathPickRow x:Name="RomPathRow" NoPathText="{x:Static app:ValueTexts.NoRomChosen}" BrowseClick="OnRomBrowseClick"/>
+        </StackPanel>
+        <Border Classes="panelRule"/>
+        <controls:SettingSlider x:Name="DragScrollSetting" SettingName="Drag Scroll Speed" TickFrequency="1"/>
+        <controls:SettingSlider x:Name="ZoomSpeedSetting" SettingName="Zoom Speed" TickFrequency="5"/>
+        <Border Classes="panelRule"/>
+        <StackPanel Classes="settingCheckBoxes">
+            <CheckBox x:Name="OpenMmlBox" Content="Open MML After Export"/>
+            <CheckBox x:Name="SmwOriginalsBox" Content="Include SMW's Original Songs In ROM Extraction"/>
+            <CheckBox x:Name="UpdateCheckBox" Content="Check For Updates At Launch"/>
+        </StackPanel>
+        <controls:CloseButton Click="OnDismissClick"/>
+    </StackPanel>
+</Window>

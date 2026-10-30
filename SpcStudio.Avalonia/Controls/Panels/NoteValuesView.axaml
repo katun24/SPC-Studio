@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:SpcStudio.Controls"
+             xmlns:app="using:SpcStudio"
+             x:Class="SpcStudio.Controls.NoteValuesView"
+             ClipToBounds="False">
+    <StackPanel>
+        <StackPanel>
+            <controls:FieldRow Label="Gate">
+                <Slider x:Name="GateSlider" Classes="fieldSlider"/>
+                <TextBox x:Name="GateBox" Classes="numericField"/>
+                <controls:FieldOverride x:Name="GateSwitch"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="Velocity">
+                <Slider x:Name="VelocitySlider" Classes="fieldSlider"/>
+                <TextBox x:Name="VelocityBox" Classes="numericField"/>
+                <controls:FieldOverride x:Name="VelocitySwitch"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="Detune">
+                <Slider x:Name="DetuneSlider" Classes="fieldSlider"/>
+                <TextBox x:Name="DetuneBox" Classes="numericField"/>
+                <controls:FieldOverride x:Name="DetuneSwitch"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="{x:Static app:SettingLabels.ChannelVolume}">
+                <Slider x:Name="VolumeSlider" Classes="fieldSlider"/>
+                <TextBox x:Name="VolumeBox" Classes="numericField"/>
+                <controls:FieldOverride x:Name="VolumeSwitch"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="{x:Static app:SettingLabels.Amplify}">
+                <Slider x:Name="AmplifySlider" Classes="fieldSlider"/>
+                <TextBox x:Name="AmplifyBox" Classes="numericField"/>
+                <controls:FieldOverride x:Name="AmplifySwitch"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="{x:Static app:SettingLabels.Pan}">
+                <Slider x:Name="PanSlider" Classes="fieldSlider"/>
+                <TextBox x:Name="PanBox" Classes="numericField"/>
+                <controls:FieldOverride x:Name="PanSwitch"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="{x:Static app:SettingLabels.Surround}">
+                <ComboBox x:Name="SurroundBox" HorizontalAlignment="Left"
+                          Width="{StaticResource SurroundFieldWidth}"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="{x:Static app:SettingLabels.Legato}">
+                <CheckBox x:Name="LegatoCheck" Classes="fieldCheck"/>
+                <controls:FieldOverride x:Name="LegatoSwitch"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="{x:Static app:SettingLabels.Hold}">
+                <CheckBox x:Name="HoldCheck" Classes="fieldCheck"/>
+                <controls:FieldOverride x:Name="HoldSwitch"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="{x:Static app:SettingLabels.EchoSend}">
+                <CheckBox x:Name="EchoCheck" Classes="fieldCheck"/>
+                <controls:FieldOverride x:Name="EchoSwitch"/>
+            </controls:FieldRow>
+        </StackPanel>
+
+        <controls:PanelSection x:Name="EnvelopeFrame" Classes="envelope" Header="ENVELOPE">
+            <controls:EnvelopeRowsView x:Name="EnvelopeBody"/>
+        </controls:PanelSection>
+        <controls:PanelSection x:Name="VolumeFrame" Classes="volume" Header="VOLUME">
+            <StackPanel>
+                <StackPanel x:Name="VolumeList"/>
+                <controls:AddRowButton x:Name="VolumeAddButton"/>
+            </StackPanel>
+        </controls:PanelSection>
+        <controls:PanelSection x:Name="PanFrame" Classes="pan" Header="PAN">
+            <StackPanel>
+                <StackPanel x:Name="PanList"/>
+                <controls:AddRowButton x:Name="PanAddButton"/>
+            </StackPanel>
+        </controls:PanelSection>
+        <controls:PanelSection x:Name="BendFrame" Classes="bend" Header="PITCH BEND">
+            <StackPanel>
+                <StackPanel x:Name="BendList"/>
+                <controls:AddRowButton x:Name="BendAddButton"/>
+            </StackPanel>
+        </controls:PanelSection>
+        <controls:PanelSection x:Name="VibratoFrame" Classes="vibrato" Header="VIBRATO">
+            <StackPanel>
+                <StackPanel x:Name="VibratoList"/>
+                <controls:AddRowButton x:Name="VibratoAddButton"/>
+            </StackPanel>
+        </controls:PanelSection>
+        <controls:PanelSection x:Name="TremoloFrame" Classes="tremolo" Header="TREMOLO">
+            <StackPanel>
+                <StackPanel x:Name="TremoloList"/>
+                <controls:AddRowButton x:Name="TremoloAddButton"/>
+            </StackPanel>
+        </controls:PanelSection>
+    </StackPanel>
+</UserControl>
