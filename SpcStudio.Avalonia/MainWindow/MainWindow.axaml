@@ -1,0 +1,480 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        xmlns:theme="using:SpcStudio.Theme"
+        x:Class="SpcStudio.MainWindow"
+        Width="820" Height="900">
+    <DockPanel LastChildFill="True">
+        <ComboBox x:Name="WarmUpDropDown" DockPanel.Dock="Top" Classes="warmUp" Height="0" Opacity="0"
+                  IsHitTestVisible="False" Focusable="False"/>
+        <Menu x:Name="MainMenu" DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="New Song" InputGesture="{x:Static app:Shortcuts.NewSong}" Click="OnNewSong"/>
+                <MenuItem Header="Open Song..." InputGesture="{x:Static app:Shortcuts.OpenSong}" Click="OnOpenSong"/>
+                <MenuItem Header="Save Song" InputGesture="{x:Static app:Shortcuts.SaveSong}" Click="OnSaveSong"/>
+                <MenuItem Header="Save Song As..." InputGesture="{x:Static app:Shortcuts.SaveSongAs}" Click="OnSaveSongAs"/>
+                <Separator/>
+                <MenuItem Header="Import MML..." Click="OnImportClick"/>
+                <MenuItem Header="Import MIDI..." Click="OnImportMidiClick"/>
+                <MenuItem Header="Import From SMWCentral..." Click="OnImportFromSmwcClick"/>
+                <MenuItem Header="Export To MML" Click="OnExportClick"/>
+                <MenuItem Header="Export To MML As..." Click="OnExportAsClick"/>
+                <MenuItem Header="Export To SPC..." Click="OnExportSpcClick"/>
+                <MenuItem Header="Export To WAV..." Click="OnExportWavClick"/>
+                <Separator/>
+                <MenuItem Header="Extract Songs From ROM..." Click="OnExtractRomClick"/>
+                <Separator/>
+                <MenuItem Header="Transcribe From SPC..." Click="OnTranscribeSpcClick"/>
+                <Separator/>
+                <MenuItem x:Name="RecentFilesItem" Header="Recent Files"/>
+                <Separator/>
+                <MenuItem Header="Exit" InputGesture="Alt+F4" Click="OnExitClick"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem x:Name="UndoItem" Header="Undo" InputGesture="{x:Static app:Shortcuts.Undo}" Click="OnUndo"/>
+                <MenuItem x:Name="RedoItem" Header="Redo" InputGesture="{x:Static app:Shortcuts.Redo}" Click="OnRedo"/>
+            </MenuItem>
+            <MenuItem Header="Songs">
+                <MenuItem Header="Open AddmusicK Song List" Click="OnSongListClick"/>
+                <MenuItem Header="Open SPC Player" Click="OnSpcPlayerClick"/>
+            </MenuItem>
+            <MenuItem Header="Channels" SubmenuOpened="OnMenuWithButtonItemsOpened">
+                <MenuItem x:Name="AddExtraChannelItem" Header="Add Extra Channel"/>
+            </MenuItem>
+            <MenuItem Header="Instruments" SubmenuOpened="OnMenuWithButtonItemsOpened">
+                <MenuItem Header="Open Instrument Picker" Click="OnInstrumentPickerClick"/>
+                <Separator/>
+                <MenuItem x:Name="CreateInstrumentItem" Header="Create Instrument"/>
+                <MenuItem x:Name="ImportInstrumentItem" Header="Import Instrument..."/>
+                <MenuItem x:Name="ExportInstrumentItem"/>
+                <MenuItem x:Name="ExportAllInstrumentsItem" Header="Export All Instruments..."/>
+                <MenuItem x:Name="DuplicateInstrumentItem"/>
+                <MenuItem x:Name="DeleteInstrumentItem"/>
+            </MenuItem>
+            <MenuItem Header="Samples" SubmenuOpened="OnMenuWithButtonItemsOpened">
+                <MenuItem Header="Open Sample Editor" Click="OnSampleEditorClick"/>
+                <Separator/>
+                <MenuItem x:Name="ImportSamplesItem" Header="Import Sample(s)..."/>
+                <MenuItem x:Name="ExportAllSamplesItem" Header="Export All Samples..."/>
+            </MenuItem>
+            <MenuItem Header="Notes">
+                <MenuItem Header="Select Multiple Notes..." Click="OnMultiselectClick"/>
+            </MenuItem>
+            <MenuItem Header="Options">
+                <MenuItem x:Name="FollowPlaybackItem" Header="Follow Playback"
+                          ToggleType="CheckBox" IsChecked="True"/>
+                <MenuItem x:Name="AuditionNotesItem" Header="Audition Notes"
+                          ToggleType="CheckBox" IsChecked="True" Click="OnAuditionNotesClick"/>
+                <MenuItem x:Name="ShowOtherChannelsItem" Header="Show Notes In Other Channels"
+                          ToggleType="CheckBox" IsChecked="True" Click="OnShowOtherChannelsClick"/>
+                <MenuItem x:Name="ShowAllTonesItem" Header="Show All Tones On Piano Keys"
+                          ToggleType="CheckBox" Click="OnShowAllTonesClick"/>
+                <MenuItem x:Name="OpenNotePanelWithSelectionItem" Header="Open Note Panel With Selection"
+                          ToggleType="CheckBox"/>
+                <Separator/>
+                <MenuItem Header="MML Export Options..." Click="OnMmlExportOptionsClick"/>
+                <MenuItem Header="Preferences..." Click="OnPreferencesClick"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="Check For Updates" Click="OnCheckForUpdatesClick"/>
+                <MenuItem Header="{x:Static app:WindowTitles.About}" Click="OnAboutClick"/>
+            </MenuItem>
+        </Menu>
+
+        <controls:TransportBar x:Name="Transport" DockPanel.Dock="Bottom"
+                               PlayPauseClick="OnPlayPauseClick" StopClick="OnStopClick"/>
+
+        <DockPanel x:Name="PanelColumn" DockPanel.Dock="Right" LastChildFill="True"
+                   Background="{StaticResource PanelBrush}"
+                   LayoutUpdated="OnPanelColumnLayoutUpdated">
+            <Panel DockPanel.Dock="Right" Width="{x:Static theme:Space.Px8}"/>
+            <DockPanel x:Name="ColumnDividerColumn" DockPanel.Dock="Left">
+                <Panel x:Name="ColumnDividerSpacer" DockPanel.Dock="Top"/>
+                <controls:DragDivider x:Name="ColumnDivider" Orientation="Vertical"/>
+            </DockPanel>
+            <controls:PanelDeck x:Name="PanelStack" Background="{StaticResource PanelBrush}">
+
+                <controls:DockablePanel x:Name="SongPanel" Grid.Row="1">
+                    <controls:DockablePanel.Header>
+                        <controls:HeaderRow Header="METADATA"/>
+                    </controls:DockablePanel.Header>
+                    <controls:DockablePanel.Body>
+                        <controls:FieldRow Label="Title" Classes.wideLabel="True">
+                            <TextBox x:Name="SongTitleBox" Classes="wideField"
+                                     TextChanged="OnSongTitleTyped"
+                                     LostFocus="OnSongTagCommitted"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Author" Classes.wideLabel="True">
+                            <TextBox x:Name="SongAuthorBox" Classes="wideField"
+                                     LostFocus="OnSongTagCommitted"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Game" Classes.wideLabel="True">
+                            <TextBox x:Name="SongGameBox" Classes="wideField"
+                                     LostFocus="OnSongTagCommitted"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Comment" Classes.wideLabel="True">
+                            <TextBox x:Name="SongCommentBox" Classes="wideField"
+                                     LostFocus="OnSongTagCommitted"/>
+                        </controls:FieldRow>
+
+                        <Border Classes="panelRule underRow"/>
+
+                        <controls:FieldRow Label="Base Volume" Classes.wideLabel="True">
+                            <Slider x:Name="VolumeSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="VolumeBox" Classes="numericField"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Base Tempo" Classes.wideLabel="True">
+                            <Slider x:Name="TempoSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="TempoBox" Classes="numericField"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Base Staccato" Classes.wideLabel="True">
+                            <CheckBox x:Name="BaseStaccatoCheck" Classes="fieldCheck"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Loop Song" Classes.wideLabel="True">
+                            <CheckBox x:Name="LoopSongCheck" Classes="fieldCheck"
+                                      IsCheckedChanged="OnLoopToggled"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Tempo Immunity" Classes.wideLabel="True">
+                            <CheckBox x:Name="TempoImmunityCheck" Classes="fieldCheck"
+                                      IsCheckedChanged="OnTempoImmunityToggled"/>
+                        </controls:FieldRow>
+                        <controls:PanelSection x:Name="BaseEchoSection" Classes="liftedGray" Header="BASE ECHO" IsCountShown="False"
+                                               RevertTooltip="{x:Static app:Tooltips.ClearBaseEcho}">
+                            <StackPanel>
+                                <controls:FieldRow Label="{x:Static app:SettingLabels.EchoDelay}" Classes.wideLabel="True">
+                                    <Slider x:Name="BaseEchoDelaySlider" Classes="fieldSlider"/>
+                                    <TextBox x:Name="BaseEchoDelayBox" Classes="numericField"/>
+                                </controls:FieldRow>
+                                <controls:FieldRow Label="{x:Static app:SettingLabels.EchoFeedback}" Classes.wideLabel="True">
+                                    <Slider x:Name="BaseEchoFeedbackSlider" Classes="fieldSlider"/>
+                                    <TextBox x:Name="BaseEchoFeedbackBox" Classes="numericField"/>
+                                </controls:FieldRow>
+                                <controls:FieldRow Label="{x:Static app:SettingLabels.EchoFilter}" Classes.wideLabel="True">
+                                    <controls:FilterFields x:Name="BaseEchoFilter" Grid.Column="2" Grid.ColumnSpan="2"/>
+                                </controls:FieldRow>
+                                <controls:FieldRow Label="Volume Left" Classes.wideLabel="True">
+                                    <Slider x:Name="BaseEchoLeftSlider" Classes="fieldSlider"/>
+                                    <TextBox x:Name="BaseEchoLeftBox" Classes="numericField"/>
+                                </controls:FieldRow>
+                                <controls:FieldRow Label="Volume Right" Classes.wideLabel="True">
+                                    <Slider x:Name="BaseEchoRightSlider" Classes="fieldSlider"/>
+                                    <TextBox x:Name="BaseEchoRightBox" Classes="numericField"/>
+                                </controls:FieldRow>
+                            </StackPanel>
+                        </controls:PanelSection>
+
+                        <StackPanel x:Name="InstallRows">
+                            <Border Classes="panelRule"/>
+
+                            <controls:FieldRow Label="Sample Path" Classes.wideLabel="True">
+                                <TextBox x:Name="SamplePathBox" Classes="wideField"
+                                         controls:FieldInput.Accepts="DiskName"
+                                         LostFocus="OnSamplePathCommitted"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="Sample Group" Classes.wideLabel="True">
+                                <ComboBox x:Name="SampleGroupBox" Classes="wideField"
+                                          SelectionChanged="OnSampleGroupSelected"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="{x:Static app:SettingLabels.SmwSamples}" Classes.wideLabel="True">
+                                <CheckBox x:Name="SmwInstrumentsCheck" Classes="fieldCheck"
+                                          IsCheckedChanged="OnSmwInstrumentsToggled"/>
+                            </controls:FieldRow>
+                        </StackPanel>
+
+                        <StackPanel x:Name="AramSection" Classes="listPitch">
+                            <Border Classes="panelRule underRow"/>
+
+                            <controls:HeaderRow Header="ARAM USAGE" Classes="groupHeader">
+                                <Button x:Name="AramRefreshButton" ToolTip.Tip="{x:Static app:Tooltips.RefreshAramUsage}"
+                                        Classes="squareIcon" Click="OnAramRefreshClick">
+                                    <theme:IconShape Data="{x:Static theme:AppIcons.Refresh}"/>
+                                </Button>
+                            </controls:HeaderRow>
+                            <controls:FieldRow Label="AddmusicK" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramAddmusicKText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="Sound Effects" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramSoundEffectsText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="Global Songs" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramGlobalSongsText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="Song Data" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramSongDataText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="Sample Table" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramSampleTableText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="Sample Group" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramGroupText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow x:Name="AramSamplesRow" Label="{x:Static app:MainWindow.AramSamplesLabel}" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramSamplesText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="Echo" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramEchoText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                            <controls:FieldRow Label="Free" Classes.wideLabel="True" Classes.readout="True">
+                                <SelectableTextBlock x:Name="AramFreeText" Classes="fieldValue counting"/>
+                            </controls:FieldRow>
+                        </StackPanel>
+                    </controls:DockablePanel.Body>
+                </controls:DockablePanel>
+
+                <controls:DockablePanel x:Name="ChannelPanel" Grid.Row="1">
+                    <controls:DockablePanel.Header>
+                        <controls:FieldRow>
+                            <controls:FieldOverride>
+                                <controls:HueButton x:Name="ChannelColorButton" Tooltip="{x:Static app:Tooltips.ChangeChannelColor}"/>
+                            </controls:FieldOverride>
+                            <ComboBox x:Name="ChannelBox" Grid.Column="2" Grid.ColumnSpan="2"
+                                      HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                      ItemTemplate="{StaticResource SwatchItemTemplate}"
+                                      SelectionChanged="OnChannelPicked"/>
+                            <Button x:Name="SelectChannelNotesButton" Grid.Column="4" ToolTip.Tip="{x:Static app:Tooltips.SelectChannelNotes}"
+                                    Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                                    Click="OnSelectChannelNotesClick">
+                                <theme:IconShape Data="{x:Static theme:AppIcons.SelectAll}"/>
+                            </Button>
+                        </controls:FieldRow>
+                    </controls:DockablePanel.Header>
+                    <controls:DockablePanel.Body>
+                        <controls:FieldRow Label="Base Volume" Classes.wideLabel="True">
+                            <Slider x:Name="ChannelVolumeSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="ChannelVolumeBox" Classes="numericField"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Base Pan" Classes.wideLabel="True">
+                            <Slider x:Name="ChannelPanSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="ChannelPanBox" Classes="numericField"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Base Surround" Classes.wideLabel="True">
+                            <ComboBox x:Name="ChannelSurroundBox" HorizontalAlignment="Left"
+                                      Width="{StaticResource SurroundFieldWidth}"
+                                      SelectionChanged="OnChannelSurroundPicked"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow Label="Base Echo" Classes.wideLabel="True">
+                            <CheckBox x:Name="ChannelEchoCheck" Classes="fieldCheck"/>
+                        </controls:FieldRow>
+                    </controls:DockablePanel.Body>
+                </controls:DockablePanel>
+
+                <controls:InstrumentPanel x:Name="Instruments" Grid.Row="1"/>
+
+                <controls:DockablePanel x:Name="NotePanel" Grid.Row="1">
+                    <controls:DockablePanel.Header>
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <TextBlock x:Name="NoteCountText" Grid.Column="0" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Button Content="Multiselect" Click="OnMultiselectClick"/>
+                                <Button x:Name="PlayNoteButton" Classes="squareIcon" Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px8}}"
+                                        Click="OnPlayNoteClick">
+                                    <theme:IconShape x:Name="PlayNoteIcon"
+                                          Data="{x:Static theme:AppIcons.Play}"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </controls:DockablePanel.Header>
+                    <controls:DockablePanel.Body>
+                        <StackPanel x:Name="NoteStack" Margin="{theme:SpaceThickness Bottom={x:Static theme:Space.Px10}}">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <TextBlock Text="Instrument" Classes="fieldLabel"/>
+                                <ComboBox x:Name="NoteInstrumentBox" Grid.Column="1" Grid.ColumnSpan="2"
+                                          HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                          ItemTemplate="{StaticResource SwatchItemTemplate}"
+                                          SelectionChanged="OnNoteInstrumentSelected"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,*,*" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px8}}">
+                                <controls:LabeledField Grid.Column="0" Label="{x:Static app:SettingLabels.NotePosition}">
+                                    <TextBox x:Name="PositionBox" Classes="numericField positionField"
+                                             LostFocus="OnPositionCommitted"/>
+                                </controls:LabeledField>
+                                <controls:LabeledField Grid.Column="1" Label="{x:Static app:SettingLabels.NoteTone}">
+                                    <TextBox x:Name="ToneBox" Classes="noteNameField"
+                                             TextChanged="OnToneChanged" LostFocus="OnToneCommitted"/>
+                                </controls:LabeledField>
+                                <controls:LabeledField Grid.Column="2" Label="{x:Static app:SettingLabels.NoteLength}">
+                                    <TextBox x:Name="LengthBox" Classes="numericField lengthField"
+                                             TextChanged="OnLengthChanged"
+                                             LostFocus="OnLengthCommitted"/>
+                                </controls:LabeledField>
+                            </Grid>
+                            <controls:NoteValuesView x:Name="NotePanelValues" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px12}}"/>
+                        </StackPanel>
+                    </controls:DockablePanel.Body>
+                </controls:DockablePanel>
+            </controls:PanelDeck>
+        </DockPanel>
+
+        <Border x:Name="Toolbar" DockPanel.Dock="Top" Background="{StaticResource PanelBrush}"
+                Padding="{theme:SpaceThickness AllSides={x:Static theme:Space.Px8}}" SizeChanged="OnToolbarSizeChanged">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Spacing="{x:Static theme:Space.Px8}">
+                    <Button ToolTip.Tip="{x:Static app:Tooltips.NewSong}" Classes="squareIcon" Click="OnNewSong">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.FilePlus}"/>
+                    </Button>
+                    <Button ToolTip.Tip="{x:Static app:Tooltips.OpenSong}" Classes="squareIcon" Click="OnOpenSong">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.TrayDown}"/>
+                    </Button>
+                    <Button ToolTip.Tip="{x:Static app:Tooltips.SaveSong}" Classes="squareIcon" Click="OnSaveSong">
+                        <theme:IconShape Data="{x:Static theme:AppIcons.ContentSave}"/>
+                    </Button>
+                    <Button x:Name="ImportButton" Content="Import MML..." Classes="textButton" Click="OnImportClick"/>
+                    <Button x:Name="ExportButton" Content="Export To MML" Classes="textButton" Click="OnExportClick"/>
+                    <Button x:Name="SongListButton" Content="Song List" Classes="textButton" Click="OnSongListClick"/>
+                    <Button x:Name="InstrumentPickerButton" Content="Instrument Picker" Classes="textButton" Click="OnInstrumentPickerClick"/>
+                    <Button x:Name="SampleEditorButton" Content="Sample Editor" Classes="textButton" Click="OnSampleEditorClick"/>
+                    <Button x:Name="SpcPlayerButton" Content="SPC Player" Classes="textButton" Click="OnSpcPlayerClick"/>
+                </StackPanel>
+                <controls:ToolbarField Label="Signature">
+                    <StackPanel Orientation="Horizontal" Spacing="{x:Static theme:Space.Px6}">
+                        <TextBox x:Name="BeatsPerBarBox" Classes="numericField twoDigitField"
+                                 TextChanged="OnTimeSignatureTyped" LostFocus="OnTimeSignatureCommitted"/>
+                        <TextBlock Classes="fieldSlash"/>
+                        <TextBox x:Name="BeatUnitBox" Classes="numericField twoDigitField"
+                                 TextChanged="OnTimeSignatureTyped" LostFocus="OnTimeSignatureCommitted"/>
+                    </StackPanel>
+                </controls:ToolbarField>
+                <controls:ToolbarField Label="Snap">
+                    <ComboBox x:Name="SnapBox" Width="110" MaxDropDownHeight="Infinity"
+                              SelectionChanged="OnSnapSelected"/>
+                </controls:ToolbarField>
+            </StackPanel>
+        </Border>
+
+        <Grid>
+            <Grid x:Name="LaneGrid" ColumnDefinitions="Auto,*"
+                  Background="{StaticResource PanelBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" MinHeight="120"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="0"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Grid.Column="0" Padding="{theme:SpaceThickness Left={x:Static theme:Space.Px8} Top={x:Static theme:Space.Px10}}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="CHANNEL" Classes="panelHeader"
+                                   Margin="{theme:SpaceThickness Right={x:Static theme:Space.Px8} Bottom={x:Static theme:Space.Px8}}" HorizontalAlignment="Center"/>
+                        <Border DockPanel.Dock="Bottom" Padding="{theme:SpaceThickness Top={x:Static theme:Space.Px8}}">
+                            <Button x:Name="AddLaneButton" ToolTip.Tip="{x:Static app:Tooltips.ShowLanes}" Classes="squareIcon"
+                                    HorizontalAlignment="Right" Margin="{theme:SpaceThickness Right={x:Static theme:Space.Px8}}">
+                                <theme:IconShape x:Name="AddLaneIcon" Data="{x:Static theme:AppIcons.PlaylistPlus}"/>
+                            </Button>
+                        </Border>
+                        <ScrollViewer Focusable="False" Classes="fadedEdges" VerticalScrollBarVisibility="Hidden"
+                                      HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel x:Name="ChannelButtons" Background="Transparent"
+                                        Margin="{theme:SpaceThickness Right={x:Static theme:Space.Px8}}"/>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Border>
+                <Border x:Name="LaneFrame" Grid.Row="2" Grid.Column="1" Classes="surfaceFrame"
+                        Background="{StaticResource WindowBrush}">
+                <DockPanel x:Name="LaneArea" LastChildFill="True">
+                    <Panel DockPanel.Dock="Right" Classes="reservedBarColumn"/>
+                    <Border x:Name="LaneLabelColumn" DockPanel.Dock="Left" ClipToBounds="True"
+                            Background="{StaticResource PanelBrush}">
+                        <Canvas>
+                            <StackPanel x:Name="LaneLabels" Canvas.Left="0" Canvas.Top="0"/>
+                        </Canvas>
+                    </Border>
+                    <ScrollViewer x:Name="LaneScroll" Focusable="False" Classes="scrolledWithRoll"
+                                  ScrollChanged="OnLaneScrollChanged">
+                        <StackPanel x:Name="LaneHost" HorizontalAlignment="Left"
+                                    Margin="{theme:SpaceThickness Right={x:Static theme:Space.Px10}}">
+                            <controls:VolumeLane x:Name="Volumes"/>
+                            <controls:TempoLane x:Name="Tempos"/>
+                            <controls:EchoVolumeLane x:Name="EchoVolumes"/>
+                            <controls:EchoUnitLane x:Name="EchoUnits"/>
+                            <controls:StaccatoLane x:Name="Staccatos"/>
+                            <controls:PanLane x:Name="Pans"/>
+                            <controls:ChannelVolumeLane x:Name="ChannelVolumes"/>
+                            <controls:ChannelEchoLane x:Name="ChannelEchoes"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+                </Border>
+                <controls:DragDivider x:Name="LaneSplitter" Grid.Row="1" Grid.Column="1"/>
+                <Border Grid.Row="0" Grid.Column="1" Classes="surfaceFrame"
+                        Background="{StaticResource WindowBrush}">
+                <DockPanel LastChildFill="True">
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                        <Panel DockPanel.Dock="Right" Classes="reservedBarColumn"/>
+                        <Border DockPanel.Dock="Left"
+                                Width="{x:Static controls:RollMetrics.KeyWidth}"
+                                Background="{StaticResource PanelBrush}">
+                            <Button x:Name="RulerUnitButton" ToolTip.Tip="{x:Static app:Tooltips.ToggleRulerMode}" Classes="panelCorner latch" BorderThickness="0"
+                                    HorizontalAlignment="Right" Click="OnRulerUnitClick">
+                                <theme:IconShape x:Name="RulerUnitIcon"
+                                      Data="{x:Static theme:AppIcons.AlphaB}"
+                                      Fill="{StaticResource TextSecondaryBrush}"/>
+                            </Button>
+                        </Border>
+                        <ScrollViewer x:Name="RulerScroll" Classes="scrolledWithRoll">
+                            <controls:TimeRuler x:Name="Ruler" HorizontalAlignment="Left"
+                                                Margin="{theme:SpaceThickness Right={x:Static theme:Space.Px10}}"/>
+                        </ScrollViewer>
+                    </DockPanel>
+                    <controls:PianoKeys x:Name="Keys" DockPanel.Dock="Left"/>
+                    <ScrollViewer x:Name="RollScroll" ScrollChanged="OnRollScrollChanged"
+                                  Classes="reservedBarRow"
+                                  VerticalScrollBarVisibility="Auto">
+                        <controls:PianoRoll x:Name="Roll" HorizontalAlignment="Left"
+                                            VerticalAlignment="Top" Margin="{theme:SpaceThickness Right={x:Static theme:Space.Px10} Bottom={x:Static theme:Space.Px10}}"/>
+                    </ScrollViewer>
+                </DockPanel>
+                </Border>
+                <controls:MarkerLayer x:Name="Markers" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"/>
+            </Grid>
+            <Canvas x:Name="EditorLayer" ClipToBounds="True">
+                <Border x:Name="CellEditor" Classes="panelFrame cellEditor" IsVisible="False"
+                        LostFocus="OnCellLostFocus">
+                    <StackPanel>
+                        <controls:FieldRow x:Name="CellValueRow">
+                            <Slider x:Name="CellSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="CellBox" Classes="numericField"
+                                     TextChanged="OnCellChanged"/>
+                            <controls:FieldOverride>
+                                <Button x:Name="CellFadeToggle" Classes="squareIcon"
+                                        IsVisible="False" Click="OnCellFadeToggled">
+                                    <theme:IconShape x:Name="CellFadeToggleIcon"
+                                          Data="{x:Static theme:AppIcons.TrendingUp}"/>
+                                </Button>
+                            </controls:FieldOverride>
+                        </controls:FieldRow>
+                        <controls:FieldRow x:Name="CellRightRow" Label="Right" IsVisible="False">
+                            <Slider x:Name="CellRightSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="CellRight" Classes="numericField"
+                                     TextChanged="OnCellEchoRightChanged"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow x:Name="CellFadeToRow" IsVisible="False">
+                            <Slider x:Name="CellFadeToSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="CellFadeToBox" Classes="numericField"
+                                     TextChanged="OnCellFadeToChanged"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow x:Name="CellFadeToRightRow" Label="To R"
+                                           IsVisible="False">
+                            <Slider x:Name="CellFadeToRightSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="CellFadeToRight" Classes="numericField"
+                                     TextChanged="OnCellEchoRightChanged"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow x:Name="CellSurroundRow" Label="{x:Static app:SettingLabels.Surround}"
+                                           IsVisible="False">
+                            <ComboBox x:Name="CellSurroundBox" HorizontalAlignment="Left"
+                                      Width="{StaticResource SurroundFieldWidth}"
+                                      SelectionChanged="OnCellSurroundChanged"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow x:Name="CellFeedbackRow" Label="{x:Static app:SettingLabels.EchoFeedback}"
+                                           IsVisible="False">
+                            <Slider x:Name="CellFeedbackSlider" Classes="fieldSlider"/>
+                            <TextBox x:Name="CellFeedback" Classes="numericField"
+                                     TextChanged="OnCellFeedbackChanged"/>
+                        </controls:FieldRow>
+                        <controls:FieldRow x:Name="CellFilterRow" Label="{x:Static app:SettingLabels.EchoFilter}" IsVisible="False">
+                            <controls:FilterFields x:Name="CellFilter" Grid.Column="2" Grid.ColumnSpan="2"/>
+                        </controls:FieldRow>
+                    </StackPanel>
+                </Border>
+            </Canvas>
+        </Grid>
+    </DockPanel>
+</Window>

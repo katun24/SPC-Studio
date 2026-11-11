@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.MmlExportOptionsWindow"
+        Title="{x:Static app:WindowTitles.MmlExportOptions}">
+    <StackPanel Classes="dialogBody dialogSections">
+        <StackPanel Classes="settingCheckBoxes">
+            <CheckBox x:Name="LoopsBox" Content="Write repeats as loops" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="TransposedLoopsBox" Content="Write transposed repeats as loops" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="LongNotesAndRestsAsLoopsBox" Content="Write long notes/rests as loops" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="KeyOnRemoteCodeBox" Content="Write key-on/key-off commands as remote code" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="RepeatedMidNoteCommandsAsRemoteCodeBox" Content="Write repeated mid-note commands as remote code" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="HeldNotesAsLegatoBox" Content="Write held notes as legato" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="ArpeggiosAsFbBox" Content="Write arpeggios/trills as $FB" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="PitchEnvelopesBox" Content="Write shared pitch bends as pitch envelopes" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="SingleChannelEchoChangesAsF403Box" Content="Write single-channel echo changes as $F4 $03" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="FuseSongLoopEndWithIntroBox" Content="Fuse repeated song loop end with intro" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="ShortenSongLoopToOneRepeatBox" Content="Shorten repeated song loop to one repeat" IsCheckedChanged="OnOptionBoxChanged"/>
+            <CheckBox x:Name="TrimOneShotSamplesBox" Content="Trim one-shot samples" IsCheckedChanged="OnOptionBoxChanged"/>
+        </StackPanel>
+        <Border Classes="panelRule"/>
+        <StackPanel Spacing="{x:Static theme:Space.Px12}" Grid.IsSharedSizeScope="True">
+            <controls:SettingField Label="Line Length Limit">
+                <TextBox x:Name="LineLengthLimitBox" Classes="numericField"/>
+            </controls:SettingField>
+            <controls:SettingField Label="Break Lines By Bars">
+                <TextBox x:Name="BarsPerLineBox" Classes="signedField"/>
+            </controls:SettingField>
+        </StackPanel>
+        <controls:CloseButton Click="OnDismissClick"/>
+    </StackPanel>
+</Window>

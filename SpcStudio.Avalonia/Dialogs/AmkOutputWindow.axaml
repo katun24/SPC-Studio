@@ -1,0 +1,16 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.AmkOutputWindow"
+        Background="{StaticResource PanelBrush}"
+        SizeToContent="Manual" CanResize="True"
+        Width="{x:Static app:AmkOutputWindow.OpeningWidth}"
+        Height="{x:Static app:SongListWindow.OpeningHeight}" MinHeight="{x:Static app:SongListWindow.LeastHeight}">
+    <controls:WindowBody>
+        <StackPanel DockPanel.Dock="Bottom" Classes="dialogButtonRow" Margin="0">
+            <Button Classes="dialogButton emphasized" Content="OK" IsDefault="True" Click="OnDismissClick"/>
+        </StackPanel>
+        <controls:ListFrame x:Name="OutputFrame"/>
+    </controls:WindowBody>
+</Window>

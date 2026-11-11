@@ -1,0 +1,22 @@
+## Build output
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+
+## Test / profiling output
+[Tt]est[Rr]esult*/
+*.coverage
+
+## The CMake build tree for the native libraries. The binaries it produces are under
+## native/bin/, which is committed - see below.
+native/build/
+
+## The native binaries, which are committed. The [Bb]in/ rule above would otherwise take them, and
+## re-including a file needs its directory re-included first - hence two lines.
+!native/bin/
+!native/bin/**

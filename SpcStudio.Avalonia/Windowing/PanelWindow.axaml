@@ -1,0 +1,9 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="SpcStudio.PanelWindow"
+        Background="{StaticResource PanelBrush}"
+        Width="{StaticResource PanelWidth}"
+        MinWidth="{StaticResource PanelMinWidth}"
+        Height="600" MinHeight="140">
+    <Panel x:Name="PanelHost"/>
+</Window>

@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.SongListWindow"
+        Title="{x:Static app:WindowTitles.SongList}"
+        Background="{StaticResource PanelBrush}"
+        Height="{x:Static app:SongListWindow.OpeningHeight}" MinHeight="{x:Static app:SongListWindow.LeastHeight}">
+    <controls:WindowBody>
+        <StackPanel x:Name="ButtonRow" DockPanel.Dock="Top"
+                    Orientation="Horizontal" HorizontalAlignment="Left" Spacing="{x:Static theme:Space.Px8}">
+            <Button x:Name="AddSongButton" ToolTip.Tip="{x:Static app:Tooltips.AddSong}" Classes="squareIcon" Click="OnAddSongClick">
+                <theme:IconShape Data="{x:Static theme:AppIcons.TrayDown}"/>
+            </Button>
+            <Button ToolTip.Tip="{x:Static app:Tooltips.SaveSongList}" Classes="squareIcon" Click="OnSaveClick">
+                <theme:IconShape Data="{x:Static theme:AppIcons.ContentSave}"/>
+            </Button>
+            <Button x:Name="AddCurrentSongButton" Content="Add Current Song" Classes="textButton" Click="OnAddCurrentSongClick"/>
+            <Button x:Name="AddFromSmwcButton" Content="Add From SMWCentral..." Classes="textButton" Click="OnAddFromSmwcClick"/>
+            <Button Content="Run AddmusicK" Classes="textButton" Click="OnRunClick"/>
+        </StackPanel>
+        <controls:SongListDeck x:Name="Tables">
+            <controls:ListFrame x:Name="LocalList"/>
+            <controls:ListFrame x:Name="GlobalList"/>
+        </controls:SongListDeck>
+    </controls:WindowBody>
+</Window>
