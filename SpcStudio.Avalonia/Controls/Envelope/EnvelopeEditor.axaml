@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:SpcStudio.Controls"
+             xmlns:theme="using:SpcStudio.Theme"
+             x:Class="SpcStudio.Controls.EnvelopeEditor">
+    <StackPanel Classes="slotless">
+        <StackPanel Orientation="Horizontal" Height="{StaticResource FieldHeight}" Margin="{theme:SpaceThickness Bottom={x:Static theme:Space.Px4}}">
+            <RadioButton x:Name="AdsrModeButton"
+                         Content="ADSR"
+                         VerticalContentAlignment="Center"
+                         IsCheckedChanged="OnModeChanged"/>
+            <RadioButton x:Name="GainModeButton"
+                         Content="GAIN"
+                         Margin="{theme:SpaceThickness Left={x:Static theme:Space.Px18}}" VerticalContentAlignment="Center"
+                         IsCheckedChanged="OnModeChanged"/>
+        </StackPanel>
+
+        <StackPanel x:Name="AdsrFields">
+            <controls:FieldRow Label="Attack">
+                <Slider x:Name="AttackSlider" Classes="fieldSlider"/>
+                <TextBox x:Name="AttackBox" Classes="numericField"
+                         TextChanged="OnFieldChanged" LostFocus="OnFieldCommitted"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="Decay">
+                <Slider x:Name="DecaySlider" Classes="fieldSlider"/>
+                <TextBox x:Name="DecayBox" Classes="numericField"
+                         TextChanged="OnFieldChanged" LostFocus="OnFieldCommitted"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="Sustain">
+                <Slider x:Name="SustainLevelSlider" Classes="fieldSlider"/>
+                <TextBox x:Name="SustainLevelBox" Classes="numericField"
+                         TextChanged="OnFieldChanged" LostFocus="OnFieldCommitted"/>
+            </controls:FieldRow>
+            <controls:FieldRow Label="Release">
+                <Slider x:Name="SustainRateSlider" Classes="fieldSlider"/>
+                <TextBox x:Name="SustainRateBox" Classes="numericField"
+                         TextChanged="OnFieldChanged" LostFocus="OnFieldCommitted"/>
+            </controls:FieldRow>
+        </StackPanel>
+
+        <StackPanel x:Name="GainFields">
+            <controls:FieldRow Label="Shape">
+                <ComboBox x:Name="GainShapeBox" Classes="wideField"
+                          SelectionChanged="OnGainShapeChanged"/>
+            </controls:FieldRow>
+            <controls:FieldRow x:Name="GainValueRow" Label="Level">
+                <Slider x:Name="GainValueSlider" Classes="fieldSlider"/>
+                <TextBox x:Name="GainValueBox" Classes="numericField"
+                         TextChanged="OnFieldChanged" LostFocus="OnFieldCommitted"/>
+            </controls:FieldRow>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

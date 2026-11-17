@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.LoopOptionsWindow"
+        Title="{x:Static app:WindowTitles.LoopOptions}">
+    <StackPanel Classes="dialogBody dialogSections">
+        <StackPanel Classes="settingCheckBoxes">
+            <CheckBox x:Name="ShortestLoopBox" Content="Prefer Shortest Loop"/>
+            <CheckBox x:Name="StartsBetweenBlocksBox" Content="Try Loop Starts Between Blocks"/>
+            <CheckBox x:Name="FitToBlocksBox" Content="Fit Loop To Blocks"/>
+            <CheckBox x:Name="FlattenVolumeBox" Content="Flatten Volume"/>
+            <CheckBox x:Name="CrossfadeBox" Content="Crossfade Loop"/>
+            <CheckBox x:Name="SmoothCyclesBox" Content="Smooth Cycles"/>
+        </StackPanel>
+        <Border Classes="panelRule"/>
+        <controls:SettingSlider x:Name="FitLoopMaxRateLossSetting" SettingName="Fit Loop Max Rate Loss"/>
+        <controls:SettingSlider x:Name="CrossfadeLengthSetting" SettingName="Crossfade Length"/>
+        <controls:SettingSlider x:Name="SmoothCyclesEffectSetting" SettingName="Smooth Cycles Effect"/>
+        <controls:CloseButton Click="OnDismissClick"/>
+    </StackPanel>
+</Window>

@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="using:SpcStudio"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.CreateChordSampleWindow"
+        Title="{x:Static app:WindowTitles.CreateChordSample}">
+    <StackPanel Classes="dialogBody dialogSections">
+        <TextBlock x:Name="LoopWarningText" Foreground="{StaticResource WarningBrush}"/>
+        <controls:ChordKeyboard x:Name="ChordKeys" HorizontalAlignment="Left"/>
+        <Panel>
+            <CheckBox x:Name="TuneByRatiosBox" Content="Tune By Ratios" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <controls:TransportButtons x:Name="Transport" PlayPauseClick="OnPlayClick" StopClick="OnStopClick"/>
+            <SelectableTextBlock x:Name="ChordSizeText" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        </Panel>
+        <controls:ConfirmButtonRow x:Name="ButtonRow" ConfirmText="Create Chord" ConfirmClick="OnCreateChordClick" CancelClick="OnDismissClick"/>
+    </StackPanel>
+</Window>

@@ -1,0 +1,14 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.ExtractionDialog"
+        MaxHeight="640">
+    <DockPanel Classes="dialogBody">
+        <SelectableTextBlock x:Name="MessageText" Classes="dialogMessage" DockPanel.Dock="Top"/>
+        <controls:ConfirmButtonRow x:Name="ButtonRow" DockPanel.Dock="Bottom" ConfirmClick="OnConfirmClick" CancelClick="OnDismissClick"/>
+        <ScrollViewer Classes="checkList" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px12}}">
+            <StackPanel x:Name="ItemList"/>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

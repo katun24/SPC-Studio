@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SPC Studio Manual</title>
+<style>
+body { margin: 0; font-family: sans-serif; line-height: 1.5; background: #16161A; color: #C8C8D4; }
+nav { position: fixed; top: 0; left: 0; bottom: 0; width: 200px; padding: 16px; overflow-y: auto; border-right: 1px solid #44444E; }
+a { color: #6CC8E0; }
+nav ul { list-style: none; padding: 0; margin: 0; }
+nav li { margin-bottom: 8px; }
+main { margin-left: max(233px, calc((100% - 864px) / 2)); padding: 16px 32px; max-width: 800px; }
+</style>
+</head>
+<body>
+
+<nav>
+<ul>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#common-workflows">Common Workflows</a></li>
+<li><a href="#basic-concepts">Basic Concepts</a></li>
+</ul>
+</nav>
+
+<main>
+
+<h1>Welcome to SPC Studio!</h1>
+
+<p>This document serves as a tutorial for people who are completely new to not only SPC Studio, but also to creating music for SMW hacks in general.<br>
+If you do have experience with SMW music porting/composing, you may want to skip some parts of this document.</p>
+
+<ul>
+<li>to do: what is SPC Studio for?</li>
+</ul>
+
+<h2>Getting Started</h2>
+
+<p>SPC Studio works in tandem with the latest version of AddmusicK, a tool very widely used to insert songs into SMW ROM hacks.<br>
+In order for many core features of SPC Studio to work correctly, a copy of AddmusicK must be installed first.<br>
+The latest version of AddmusicK is available on SMWCentral, download it here (<a href="https://www.smwcentral.net/?p=section&amp;a=details&amp;id=37906">https://www.smwcentral.net/?p=section&amp;a=details&amp;id=37906</a>), unzip its contents, and remember the location of the unzipped folder.</p>
+
+<p>When you first launch SPC Studio, you'll be greeted with a prompt to choose your AddmusicK folder, so pick the unzipped folder. If you're unsure: it's the folder that contains AddmusicK.exe directly inside it.</p>
+
+<p>If you plan to make or insert any music for your ROM hack, be sure to also link your ROM to SPC Studio. Go to Options &gt; Preferences... and select your .smc file under 'ROM'.</p>
+
+<h2>Common Workflows</h2>
+
+<p>Before we dive deep, let's go through a few basic ways SPC Studio can be used, so that you're familiar with some of the core capabilities.</p>
+
+<h3>'I want to compose a song for my ROM hack!'</h3>
+
+<p>Start by just clicking around in the large grid in the middle of the window (a.k.a. the piano roll).<br>
+This will create notes using the selected instrument, which by default is SMW's piano.<br>
+Click the play button at the bottom (or press Spacebar) to play the song.<br>
+For all the ins and outs about how the piano roll works, how to use different instruments, and how to add all sorts of effects: this is covered in the rest of this document.</p>
+
+<p>Assuming you have AddmusicK and your ROM linked to SPC Studio already, click the 'Song List' button at the top, then click 'Add Current Song'.<br>
+Enter a name for your song and save it. You'll then see the song at the bottom of the list, with a unique number before it.<br>
+Click 'Insert Songs Into ROM' to do just what it says.<br>
+The simplest way to use the song in a level in your hack is to use the noteblock icon in Lunar Magic, tick 'Bypass the music header setting', and select your song in the dropdown below that.</p>
+
+<h3>'I want to use songs from other SNES games in my ROM hack!'</h3>
+
+<p>SPC Studio can accurately transcribe .spc (SNES music data files) to editable songs, ready to insert into a ROM.<br>
+The great majority of all music from SNES games is hosted on sites like Zophar's Domain (<a href="https://www.zophar.net/music/nintendo-snes-spc">https://www.zophar.net/music/nintendo-snes-spc</a>) and SNESmusic.org (<a href="https://www.snesmusic.org/v2/select.php?view=games">https://www.snesmusic.org/v2/select.php?view=games</a>).<br>
+To directly transcribe and add an .spc file into your hack, open the Song List and use 'Add From SPC...', then 'Insert Songs Into ROM' like before.</p>
+
+<p>.spc files can also be loaded and edited (as regular songs) in the main window through File &gt; Transcribe From SPC...<br>
+To play the original .spc files without first transcribing them, click the 'SPC Player' button above the piano roll to open its separate window, then File &gt; Load SPC...</p>
+
+<h3>'I want to use songs from SMWCentral in my ROM hack!'</h3>
+
+<p>Use the 'Add From SMWCentral...' button in the Song List and enter the song's SMWCentral page url or its number to add the song to the list. The rest should be familiar now.<br>
+SMWCentral songs can also be loaded and edited in the main window through File &gt; Import From SMWCentral...</p>
+
+<p>Note that once song has been transcribed from SPC or loaded from SMWCentral, it will be in the music folder of your AddmusicK install. You can always load it back in with File &gt; Import MML...</p>
+
+<h3>'I want to use instruments from other songs in my own song!'</h3>
+
+<p>Now that you know how to load songs from different sources into SPC Studio's main window, here's a brief example of how to identify and extract its instruments and samples:<br>
+With the song loaded, check the 'instrument' tab in the side panel on the right. The top dropdown lists all the instruments used in the song, as well as the original SMW instrument below it, which may or may not be used.<br>
+Right-click an instrument in the list to audition it, and left-click to select it. Click the 'Export Instrument' button just above it to save it to a .spcins file.<br>
+Then start a new song with Ctrl+N, and click the 'Import Instrument(s)' button on the instrument panel to import the instrument you just saved.<br>
+Click in the piano roll and you'll now hear the notes being played with the imported instrument.</p>
+
+<h3>'I want to make custom instruments/samples myself!'</h3>
+
+<p>(under construction)</p>
+
+<h2>Basic Concepts</h2>
+
+<p>Let's go over a few basic concepts that are important to understand before fully using SPC Studio.<br>
+If you went through the example workflows above, you may have noticed that the Song List lists the songs as .txt files.<br>
+Songs meant for insertion into Super Mario World ROM hacks with AddmusicK are stored in .txt files that contain all the song data, often together with .brr files that contain the raw sample data used to build up the song's instruments.<br>
+The song format of these .txt files is also known as MML.<br>
+The song format used in SPC Studio is not MML. Songs in SPC Studio can be saved into and loaded from .spcproj project files, which contain all of the song's data, including the instruments and samples.<br>
+SPC Studio can import MML, translate it to its own .spcproj data model for editing, then export it back out to MML, and insert the MML into your ROM by running AddmusicK.<br>
+This means the song data in SPC Studio is still restricted by the limitations set by the MML format (and the SNES sound chip), but it can be presented and edited in a user-friendly interface without having to worry about all the technical quirks that come with writing MML manually.<br>
+Knowing this will help to understand why certain features in SPC Studio are built the way they are.</p>
+
+<p>Composing a song means placing notes across channels.<br>
+8 channels are available in total (for exportable songs), and each channel can play one note at a time.<br>
+These are limitations set by SNES hardware, and SPC Studio simply mimics them to make songs compatible for insertion into ROMs.<br>
+Additional channels can be added freely and saved in project files, but songs using more than 8 channels cannot be exported.<br>
+Chords can be produced by simply placing notes of different tones in multiple channels, or by using advanced sampling techniques.</p>
+
+<p>The length of a note is measured in ticks, since a tick is the smallest length unit AddmusicK supports in MML.</p>
+
+<p>Each note uses a specific instrument and numerous other properties and effects can be defined per note, as well as per instrument (as default values for notes placed with that instrument), or across a channel or the whole song.<br>
+These properties/effects can be tweaked in the note panel, instrument panel, and lane stack. We'll get to the details on those later.</p>
+
+<p>Each instrument uses a specific sample (sound data), of which the properties can be edited in the Sample Editor. New samples can be added to create new instruments.</p>
+
+<p>So what's up with the 'SPC' part of SPC Studio? SPC refers to the SPC700, the sound processor of the SNES.<br>
+However, 'SPC' can also refer to .spc files, which contain snapshots of SNES audio memory that can be used to store song data from any SNES game.<br>
+While MML files are compatible with AddmusicK specifically for insertion into Super Mario World hacks, other SNES games often use completely different sound drivers, and .spc files are the common way to store sound data dumps from any SNES game.<br>
+SPC Studio can transcribe .spc files to its own .spcproj data model and vice-versa.</p>
+
+<p>Important note: pretty much any action in SPC Studio can be undone and redone by Ctrl+Z and Ctrl+Y (or Ctrl+Shift+Z) respectively.</p>
+
+<h2>Windows</h2>
+
+<p>SPC Studio contains a number of separate windows that can be used for different purposes. The main ones are:</p>
+
+<ul>
+<li>Editor Window: used for editing songs, notes, and instruments. This is where you'll spend most time.</li>
+<li>Song List: used to manage all the songs in your ROM hack.</li>
+<li>Instrument Picker: used to quickly find and preview saved instruments for easy insertion into a song.</li>
+<li>Sample Editor: used to create and edit samples.</li>
+<li>SPC Player: used for playing and previewing .spc music.</li>
+</ul>
+
+<h3>Editor Window</h3>
+
+<p>The editor window is SPC Studio's main window, which you'll see when it launches. It is built up of:</p>
+
+<ul>
+<li>The piano roll: the big grid in the middle, used to place and edit notes in different channels.</li>
+<li>The transport bar at the bottom, used for playback controls.</li>
+<li>The channel buttons on the left, used for basic channel controls.</li>
+<li>The side panel on the right, used for a wide range of operations on instruments, notes, channels, and the song itself.</li>
+<li>The lane stack below the piano roll (hidden by default), used for a variety of song-wide and channel-wide controls.</li>
+<li>Various easy-access buttons and menus at the top.</li>
+</ul>
+
+<h3>Piano Roll</h3>
+
+<p>The piano roll is the centerpiece for composing songs. Use it to place new notes or select, drag, and resize existing ones.<br>
+Time is on the horizontal axis, tone height on the vertical axis.<br>
+The left side of the piano roll is occupied by the piano keys, which can be clicked to audition the note before actually placing it.</p>
+
+<h4>Note controls</h4>
+
+<ul>
+<li>Left-click in an empty part of the piano roll to place a new note in the selected channel, using the instrument selected in the instrument panel. Notes can also be placed beyond the end of the piano roll, in which case the song and the piano roll will be lengthened.</li>
+<li>Left-click on an existing note to select it. Its properties can then be viewed in the note panel.</li>
+<li>Left-drag a note (or multiselected notes) to drag it across the piano roll.</li>
+<li>Right-click a note to erase it. Delete and Backspace can also be used to erase any selected note, including multiselected notes together, whereas right-click only erases single notes.</li>
+<li>Shift + left-drag on a note resizes that note. This also works to resize multiselected notes together.</li>
+<li>Right-drag from an empty part of the piano roll to create a multiselect box. Every note within this box will then be selected.</li>
+<li>Ctrl + left-click can be used to toggle selection of individual notes on or off. This is a useful way to add or remove notes to/from a multiselection.</li>
+<li>Right-click in an empty part of the piano roll to deselect all notes.</li>
+<li>Alt + left-click on a note in another channel selects it. Since notes in different channels can overlap each other in the piano roll, Alt + left-click cycles through these notes, so each one can be reached.</li>
+<li>Ctrl+A selects all notes of the current channel.</li>
+<li>Ctrl+Alt+A selects all notes of the entire song. Expect performance issues when a very large number of notes are selected.</li>
+<li>Ctrl+X cuts the selected note(s).</li>
+<li>Ctrl+C copies the selected note(s).</li>
+<li>Ctrl+V pastes a cut/copied note selection at the current playback position, with the same tone heights as the original selection.</li>
+</ul>
+
+<p>Keep in mind that notes can be selected across multiple channels (also with Ctrl + left-click). When pasting a cut/copied selection across multiple channels, the pasted notes will always land in the original channels.</p>
+
+<h4>Scrolling/zooming</h4>
+
+<ul>
+<li>Scrollwheel-drag anywhere in the piano roll pans the piano roll in the drag direction.</li>
+<li>Scrollwheel scroll to scroll vertically.</li>
+<li>Shift + scrollwheel to scroll horizontally.</li>
+<li>Ctrl + scrollwheel to zoom horizontally.</li>
+<li>Alt + scrollwheel to zoom vertically.</li>
+<li>Ctrl + Alt + scrollwheel to zoom both horizontally and vertically.</li>
+<li>Home/End to move the view to the start/end of the song.</li>
+</ul>
+
+<h4>Ruler and grid</h4>
+
+<p>The top of the piano roll consists of a ruler which displays the bar numbers. Bars are a construct of SPC Studio in the sense that they do not necessarily reflect the song's rhythm at all. They can simply be helpful when composing a song.<br>
+The bar sizes can be controlled in the Signature input fields above the ruler. Changing the signature does not affect the song itself, it's only a visual aid.<br>
+The piano roll is displayed as a grid divided into cells. The width of these cells, a.k.a. the 'snap size' can be controlled in the Snap dropdown above the ruler, down from 1 tick to a 'whole note' (192 ticks).<br>
+The snap size is more than just a visual aid: it controls by which unit notes 'snap' to the grid when dragged or resized.<br>
+Use the small button to the left of the ruler to toggle its view between showing bar numbers and tick numbers.</p>
+
+<h4>Markers</h4>
+
+<p>Three 'markers' are drawn over the piano roll:</p>
+
+<ul>
+<li>The playback marker (yellow line) displays the playback position. Click anywhere in the ruler to position it there.</li>
+<li>The loop marker (green line) displays the start of the song's loop. This only has a purpose if the song loops.</li>
+<li>The end marker (red line) marks the end of the song. Playback will stop when it reaches the end marker and the song does not loop. When the song does loop, playback will resume at the loop marker.</li>
+</ul>
+
+<p>All three markers can be dragged by their flag on the ruler. The loop marker always has to come before the end marker. Dragging the end marker beyond the piano roll's end lengthens the piano roll as well as the song itself.</p>
+
+<ul>
+<li>Shift + scrollwheel click positions the playback marker at the cursor.</li>
+<li>Ctrl + scrollwheel click positions the loop marker at the cursor.</li>
+<li>Alt + scrollwheel click positions the end marker at the cursor.</li>
+<li>Shift + Home/End positions the playback marker at the start/end.</li>
+<li>Ctrl + Home/End positions the loop marker at the start/end.</li>
+<li>Alt + Home/End positions the end marker at the start/end.</li>
+</ul>
+
+<h2>Transport Bar</h2>
+
+<p>Below the piano roll are a number of controls used for playback of the song:<br>
+Play/pause and stop buttons: These speak for themselves. Pressing Space also starts or pauses the song's playback.<br>
+Volume/pitch/tempo sliders: These sliders on the left can be used to alter the volume, pitch, or tempo of the song's playback. Note that these are not properties of the song, they only affect how the song is played back in SPC Studio.<br>
+Playback slider: This slider on the right can be used to skip playback to a specific part in the song.</p>
+
+<h2>Channel Buttons</h2>
+
+<p>To the left of the piano roll we have the channel buttons. Clicking one of them selects the respective channel, making its notes directly editable in the piano roll. Channels can also be selected with their corresponding number keys (1, 2, 3, ...).<br>
+Notice how notes of other channels are also still visible in the piano roll, but shown dimmed and narrower (this can be disabled with the 'Show Notes In Other Channels' option in the Options menu).<br>
+Each channel button has a mute and a solo button. The mute button mutes all notes in that channel, while the solo button does the opposite: all other (non-soloed) channels are muted.<br>
+Below the 8 main channel buttons you'll find a button to add an extra channel, up to 32 channels in total. Note that songs with more than 8 channels cannot be exported to MML, but they can be saved in the song project.<br>
+Every channel below the 8 main ones can also be deleted with the delete button on the channel button.</p>
+
+<h2>Side Panel</h2>
+
+<p>The side panel contains four tabs/panels, used to edit properties of different elements in the song: Instrument, Note, Channel, Song.<br>
+The Tab key can be used to cycle between the instrument panel and the note panel, since those are the two panels you'll normally be using most.<br>
+To the right of the tab buttons are two small buttons: the left one to pop out the selected panel into a separate window, the right one to pop out all panels together into a separate window.<br>
+Closing any of these popped out windows will dock them back into the side panel.</p>
+
+<h3>Instrument Panel</h3>
+
+<h3>Note Panel</h3>
+
+<h3>Channel Panel</h3>
+
+<h3>Song Panel</h3>
+
+<h2>Lane Stack</h2>
+
+<h2>Song List</h2>
+
+<h2>Instrument Picker</h2>
+
+<h2>Sample Editor</h2>
+
+<h2>SPC Player</h2>
+
+<h2>Glossary</h2>
+
+<h2>Frequently Asked Questions</h2>
+
+<ul>
+<li>explain architecture</li>
+<li>explain that no experience with MML/porting or other DAWs is needed</li>
+</ul>
+
+</main>
+
+</body>
+</html>

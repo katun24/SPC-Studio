@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="using:SpcStudio.Theme"
+        xmlns:controls="using:SpcStudio.Controls"
+        x:Class="SpcStudio.TextPromptDialog">
+    <StackPanel Classes="dialogBody">
+        <SelectableTextBlock x:Name="MessageText" Classes="dialogMessage" MaxWidth="{StaticResource PromptFieldWidth}"/>
+        <TextBox x:Name="FieldBox" Margin="{theme:SpaceThickness Top={x:Static theme:Space.Px12}}"
+                 Width="{StaticResource PromptFieldWidth}" HorizontalAlignment="Left"
+                 TextChanged="OnFieldChanged"/>
+        <controls:ConfirmButtonRow x:Name="ButtonRow" ConfirmClick="OnConfirmClick" CancelClick="OnDismissClick"/>
+    </StackPanel>
+</Window>
